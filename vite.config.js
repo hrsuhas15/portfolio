@@ -25,7 +25,7 @@ function spaFallback() {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   // Repository name for project pages; set VITE_BASE=/ for a user site or custom domain.
-  const base = env.VITE_BASE || '/suhashr-portfolio/'
+  const base = env.VITE_BASE || '/portfolio/'
 
   return {
     base,

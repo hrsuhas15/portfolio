@@ -1,4 +1,4 @@
-# suhashr-portfolio
+# portfolio
 
 Personal portfolio of **Suhas H R**, Lead Software Engineer. Built with Vue 3 + Vite and deployed to GitHub Pages.
 
@@ -18,7 +18,7 @@ Requires Node.js 20.
 
 ```bash
 npm install
-npm run dev       # http://localhost:5173/suhashr-portfolio/
+npm run dev       # http://localhost:5173/portfolio/
 npm run lint
 npm run build     # outputs dist/
 npm run preview   # serve the production build locally
@@ -67,9 +67,9 @@ This builds the site and pushes `dist/` to the `gh-pages` branch.
 
 One-time setup: in the repo on GitHub, open **Settings → Pages**, set **Source: Deploy from a branch**, and pick **Branch: `gh-pages`**, folder **`/ (root)`**.
 
-Run `npm run deploy` again whenever you change the site. The site is at `https://hrsuhas15.github.io/suhashr-portfolio/`.
+Run `npm run deploy` again whenever you change the site. The site is at `https://hrsuhas15.github.io/portfolio/`.
 
-**Base path:** the build uses `/suhashr-portfolio/` by default. For a custom domain or a `hrsuhas15.github.io` user site, add `VITE_BASE=/` to a `.env` file.
+**Base path:** the build uses `/portfolio/` by default. For a custom domain or a `hrsuhas15.github.io` user site, add `VITE_BASE=/` to a `.env` file.
 
 **Deep links:** GitHub Pages can't rewrite URLs, so the build copies `index.html` to `404.html`. Opening or refreshing `/projects/<slug>` loads the app, which then shows the right page.
 

@@ -171,7 +171,7 @@ onBeforeUnmount(() => {
   position: fixed;
   inset: var(--header-height) 0 0;
   z-index: -1;
-  background: rgba(2, 12, 27, 0.5);
+  background: rgba(0, 0, 0, 0.55);
 }
 
 .header-actions {
