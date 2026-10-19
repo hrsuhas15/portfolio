@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Suhas H R — Lead Software Engineer</title>
+    <meta
+      name="description"
+      content="Suhas H R is a Lead Software Engineer in Bengaluru building cloud-native platforms, distributed systems, and IoT solutions on AWS."
+    />
+    <meta name="author" content="Suhas H R" />
+    <meta name="theme-color" content="#050b14" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Suhas H R" />
+    <meta property="og:title" content="Suhas H R — Lead Software Engineer" />
+    <meta
+      property="og:description"
+      content="Lead Software Engineer building cloud-native platforms, distributed systems, and IoT solutions."
+    />
+    <meta name="twitter:card" content="summary" />
+
+    <script>
+      // Apply the saved or system theme before first paint to avoid a flash.
+      (function () {
+        var theme
+        try {
+          theme = localStorage.getItem('theme')
+        } catch (e) {
+          theme = null
+        }
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+        }
+        document.documentElement.setAttribute('data-theme', theme)
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <noscript>
+      <p style="padding: 2rem; font-family: sans-serif">
+        This portfolio needs JavaScript. You can still reach Suhas H R at
+        <a href="mailto:hrsuhas15@gmail.com">hrsuhas15@gmail.com</a>.
+      </p>
+    </noscript>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
