@@ -16,49 +16,18 @@ const resumeUrl = import.meta.env.BASE_URL + profile.resumePath
 <template>
   <section class="hero container" aria-labelledby="hero-title">
     <div class="hero-text">
-      <p class="mono hello">Hi, my name is</p>
+      <p class="mono hello">Hi, I am</p>
       <h1 id="hero-title" class="name">{{ profile.name }}.</h1>
       <p class="tagline">{{ profile.tagline }}</p>
       <p class="role">{{ profile.headline.join(' · ') }}</p>
       <p class="intro">{{ profile.intro }}</p>
       <p class="location"><MapPin :size="16" aria-hidden="true" /> {{ profile.location }}</p>
       <div class="actions">
-        <RouterLink to="/projects" class="btn btn-primary">View projects <ArrowRight :size="16" aria-hidden="true" /></RouterLink>
-        <a :href="resumeUrl" class="btn" target="_blank" rel="noopener">Download resume</a>
+        <RouterLink to="/about" class="btn">More about me <ArrowRight :size="16" aria-hidden="true" /></RouterLink>
       </div>
       <ContactLinks class="hero-links" />
     </div>
     <ProfilePhoto class="hero-photo" size="clamp(140px, 28vw, 300px)" />
-  </section>
-
-  <section class="section container" aria-labelledby="about">
-    <SectionHeading id="about">About me</SectionHeading>
-    <div class="about-grid">
-      <div>
-        <p v-for="para in profile.summary" :key="para">{{ para }}</p>
-        <RouterLink to="/about" class="more-link mono">More about me <ArrowRight :size="14" aria-hidden="true" /></RouterLink>
-      </div>
-      <div>
-        <h3 class="mono small-heading">Here are the technologies I work with:</h3>
-        <SkillsGrid />
-      </div>
-    </div>
-  </section>
-
-  <section class="section container" aria-labelledby="experience">
-    <SectionHeading id="experience">Where I've worked</SectionHeading>
-    <ExperienceTimeline compact />
-
-    <h3 class="achievements-title">Key achievements</h3>
-    <ul class="achievements">
-      <li v-for="item in achievements" :key="item.title" class="achievement">
-        <h4>{{ item.title }}</h4>
-        <p>{{ item.description }}</p>
-        <RouterLink v-if="item.projectSlug" :to="`/projects/${item.projectSlug}`" class="mono more-link">
-          Case study <ArrowRight :size="14" aria-hidden="true" />
-        </RouterLink>
-      </li>
-    </ul>
   </section>
 
   <section class="section container" aria-labelledby="work">
@@ -74,7 +43,6 @@ const resumeUrl = import.meta.env.BASE_URL + profile.resumePath
   </section>
 
   <section class="section container contact" aria-labelledby="contact">
-    <p class="mono overline">What's next?</p>
     <h2 id="contact" class="contact-title">Get in touch</h2>
     <p>
       Whether you have a question about my work or want to talk about cloud platforms and

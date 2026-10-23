@@ -6,8 +6,9 @@ import { useTheme } from '../composables/useTheme'
 import { profile } from '../data/profile'
 
 const navLinks = [
+  { label: 'Home', to: '/' },
   { label: 'About', to: '/about' },
-  { label: 'Experience', to: { path: '/', hash: '#experience' } },
+  { label: 'Experience', to: { path: '/about', hash: '#experience' } },
   { label: 'Projects', to: '/projects' },
   { label: 'Contact', to: { path: '/', hash: '#contact' } },
 ]
@@ -69,7 +70,7 @@ onBeforeUnmount(() => {
             </RouterLink>
           </li>
         </ol>
-        <a :href="resumeUrl" class="btn btn-sm" target="_blank" rel="noopener">Resume</a>
+        <a :href="resumeUrl" class="btn btn-sm" target="_blank" rel="noopener">Download Resume</a>
       </nav>
 
       <div class="header-actions">

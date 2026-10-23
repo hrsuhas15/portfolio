@@ -2,7 +2,7 @@
 :root,
 :root[data-theme='dark'] {
   color-scheme: dark;
-  --bg: #050b14;
+  --bg: #0a1825;
   --bg-elevated: #0b131e;
   --bg-subtle: #111b27;
   --border: #1b2633;
@@ -12,7 +12,7 @@
   --text-muted: #8a95a3;
   --accent: #64ffda;
   --accent-tint: rgba(100, 255, 218, 0.08);
-  --accent-contrast: #050b14;
+  --accent-contrast: #232425;
   --warning: #fbbf24;
   --warning-tint: rgba(251, 191, 36, 0.1);
   --shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.8);

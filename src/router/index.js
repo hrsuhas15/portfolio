@@ -22,7 +22,7 @@ const routes = [
   {
     path: '/projects/:slug',
     name: 'project',
-    component: () => import('../pages/ProjectDetailPage.vue'),
+    component: () => import('../pages/NotFoundPage.vue'),
     props: true,
   },
   {

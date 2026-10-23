@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 
 const STORAGE_KEY = 'theme'
-const THEME_COLORS = { dark: '#050b14', light: '#f8fafc' }
+const THEME_COLORS = { dark: '#232425', light: '#f8fafc' }
 
 // index.html sets data-theme before first paint; read it back as the initial value.
 const theme = ref(document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark')

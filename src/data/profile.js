@@ -32,7 +32,7 @@ export const profile = {
   resumePath: 'resume.pdf',
   // Profile picture: put a square image (~600×600) in public/, e.g. public/profile.jpg,
   // then set this to 'profile.jpg'. While null, the site shows your initials instead.
-  photo: null,
+  photo: 'profile1.png',
   initials: 'SH',
 }
 
