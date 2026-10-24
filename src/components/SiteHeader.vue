@@ -17,7 +17,17 @@ const resumeUrl = import.meta.env.BASE_URL + profile.resumePath
 const { theme, toggleTheme } = useTheme()
 const menuOpen = ref(false)
 const scrolled = ref(false)
+const progress = ref(0)
+const isMobile = ref(false)
 const route = useRoute()
+
+// On mobile the nav is teleported to <body> so the full-screen overlay can't be
+// trapped (or click-blocked) by the header's stacking context.
+let mq = null
+function onMqChange(e) {
+  isMobile.value = e.matches
+  if (!e.matches) menuOpen.value = false
+}
 
 watch(() => route.fullPath, () => (menuOpen.value = false))
 watch(menuOpen, (open) => document.body.classList.toggle('no-scroll', open))
@@ -33,15 +43,23 @@ function onKeydown(event) {
 }
 function onScroll() {
   scrolled.value = window.scrollY > 8
+  const doc = document.documentElement
+  const max = doc.scrollHeight - doc.clientHeight
+  progress.value = max > 0 ? Math.min(1, window.scrollY / max) : 0
 }
 
 onMounted(() => {
   window.addEventListener('keydown', onKeydown)
   window.addEventListener('scroll', onScroll, { passive: true })
+  mq = window.matchMedia('(max-width: 767px)')
+  isMobile.value = mq.matches
+  mq.addEventListener('change', onMqChange)
 })
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', onKeydown)
   window.removeEventListener('scroll', onScroll)
+  if (mq) mq.removeEventListener('change', onMqChange)
+  document.body.classList.remove('no-scroll')
 })
 </script>
 
@@ -55,23 +73,31 @@ onBeforeUnmount(() => {
         </svg>
       </RouterLink>
 
-      <nav id="site-nav" class="nav" :class="{ open: menuOpen }" aria-label="Main">
-        <ol>
-          <li v-for="link in navLinks" :key="link.label">
-            <RouterLink
-              :to="link.to"
-              class="nav-link"
-              :class="{ current: isCurrent(link) }"
-              :aria-current="isCurrent(link) ? 'page' : undefined"
-              active-class=""
-              exact-active-class=""
-            >
-              {{ link.label }}
-            </RouterLink>
-          </li>
-        </ol>
-        <a :href="resumeUrl" class="btn btn-sm" target="_blank" rel="noopener">Download Resume</a>
-      </nav>
+      <Teleport to="body" :disabled="!isMobile">
+        <nav
+          id="site-nav"
+          class="nav"
+          :class="{ open: menuOpen, 'nav-mobile': isMobile }"
+          aria-label="Main"
+        >
+          <ol>
+            <li v-for="link in navLinks" :key="link.label">
+              <RouterLink
+                :to="link.to"
+                class="nav-link"
+                :class="{ current: isCurrent(link) }"
+                :aria-current="isCurrent(link) ? 'page' : undefined"
+                active-class=""
+                exact-active-class=""
+                @click="menuOpen = false"
+              >
+                {{ link.label }}
+              </RouterLink>
+            </li>
+          </ol>
+          <a :href="resumeUrl" class="btn btn-sm" target="_blank" rel="noopener">Download Resume</a>
+        </nav>
+      </Teleport>
 
       <div class="header-actions">
         <button
@@ -96,6 +122,7 @@ onBeforeUnmount(() => {
         </button>
       </div>
     </div>
+    <div class="scroll-progress" :style="{ transform: `scaleX(${progress})` }" aria-hidden="true"></div>
     <div v-if="menuOpen" class="backdrop" aria-hidden="true" @click="menuOpen = false"></div>
   </header>
 </template>
@@ -113,6 +140,19 @@ onBeforeUnmount(() => {
 
 .site-header.scrolled {
   box-shadow: var(--shadow);
+}
+
+/* Reading-progress bar pinned to the bottom edge of the header */
+.scroll-progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  transform-origin: left;
+  transform: scaleX(0);
+  background: linear-gradient(90deg, var(--accent), #7c93ff);
+  will-change: transform;
 }
 
 .header-inner {
@@ -139,6 +179,11 @@ onBeforeUnmount(() => {
   list-style: none;
   margin: 0;
   padding: 0;
+  counter-reset: nav;
+}
+
+.nav ol li {
+  counter-increment: nav;
 }
 
 .nav-link {
@@ -148,6 +193,15 @@ onBeforeUnmount(() => {
   color: var(--text-strong);
   font-size: var(--fz-sm);
   font-weight: 500;
+}
+
+/* Monospace index prefix, e.g. "01." — a classic dev-portfolio touch */
+.nav-link::before {
+  content: counter(nav, decimal-leading-zero) '.';
+  margin-right: 5px;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.78em;
 }
 
 .nav-link:hover,
@@ -171,8 +225,9 @@ onBeforeUnmount(() => {
 .backdrop {
   position: fixed;
   inset: var(--header-height) 0 0;
-  z-index: -1;
+  z-index: 40;
   background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(2px);
 }
 
 .header-actions {
@@ -197,38 +252,80 @@ onBeforeUnmount(() => {
   background: var(--accent-tint);
 }
 
-/* Mobile: nav becomes a full-height drawer */
+/* Mobile: nav becomes a full-screen overlay */
 @media (max-width: 767px) {
   .nav {
     position: fixed;
-    inset: var(--header-height) 0 0 auto;
-    width: min(80vw, 320px);
+    inset: var(--header-height) 0 0 0;
+    z-index: 100;
+    width: 100vw;
+    height: auto;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
-    gap: var(--space-6);
-    background: var(--bg-elevated);
-    box-shadow: var(--shadow);
-    transform: translateX(100%);
+    gap: var(--space-5);
+    padding: var(--space-6);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--bg);
+    opacity: 0;
     visibility: hidden;
-    transition: transform var(--duration) var(--ease), visibility var(--duration);
+    transform: translateY(-10px);
+    transition: opacity var(--duration) var(--ease), transform var(--duration) var(--ease),
+      visibility var(--duration);
   }
 
   .nav.open {
-    transform: none;
+    opacity: 1;
     visibility: visible;
+    transform: none;
   }
 
   .nav ol {
     flex-direction: column;
-    align-items: center;
-    gap: var(--space-4);
+    align-items: stretch;
+    width: 100%;
+    gap: var(--space-3);
+  }
+
+  .nav ol li {
+    width: 100%;
   }
 
   .nav-link {
-    font-size: var(--fz-lg);
-    text-align: center;
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    width: 100%;
+    padding: var(--space-4) var(--space-5);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-elevated);
+    font-size: var(--fz-xl);
+    font-weight: 600;
+  }
+
+  .nav-link::before {
+    font-size: 0.9em;
+  }
+
+  .nav-link:hover,
+  .nav-link.current {
+    border-color: var(--accent);
+    background: var(--accent-tint);
+  }
+
+  /* The underline marker is awkward on big rows; the tint/border is clearer */
+  .nav-link.current::after {
+    display: none;
+  }
+
+  .nav .btn {
+    width: 100%;
+    margin-top: var(--space-4);
+    min-height: 54px;
+    font-size: var(--fz-md);
   }
 }
 

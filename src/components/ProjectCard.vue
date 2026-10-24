@@ -7,7 +7,7 @@ defineProps({
 </script>
 
 <template>
-  <article class="card">
+  <article v-tilt="{ max: 6, scale: 1.02 }" class="card">
     <p class="mono meta">{{ project.category }}<template v-if="project.context"> · {{ project.context }}</template></p>
     <h3>
       <RouterLink :to="`/projects/${project.slug}`" class="title-link">{{ project.title }}</RouterLink>
@@ -31,14 +31,37 @@ defineProps({
   background: var(--bg-elevated);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  transition: var(--transition);
+  transition: border-color var(--duration) var(--ease), box-shadow var(--duration) var(--ease),
+    transform var(--duration) var(--ease);
+}
+
+/* Accent glow that fades in on hover */
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity var(--duration) var(--ease);
+  background: radial-gradient(120% 120% at 50% 0%, var(--accent-tint), transparent 60%);
+}
+
+.card:hover::after,
+.card:focus-within::after {
+  opacity: 1;
 }
 
 .card:hover,
 .card:focus-within {
-  transform: translateY(-4px);
   border-color: var(--accent);
-  box-shadow: var(--shadow);
+  box-shadow: 0 18px 40px -22px rgba(0, 0, 0, 0.85), 0 0 0 1px var(--accent-tint);
+}
+
+/* Keep content above the glow layer */
+.card > * {
+  position: relative;
+  z-index: 1;
 }
 
 .meta {

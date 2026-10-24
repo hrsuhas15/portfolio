@@ -25,6 +25,14 @@ import { skillGroups } from '../data/skills'
   background: var(--bg-elevated);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
+  transition: border-color var(--duration) var(--ease), transform var(--duration) var(--ease),
+    box-shadow var(--duration) var(--ease);
+}
+
+.group:hover {
+  border-color: var(--accent);
+  transform: translateY(-4px);
+  box-shadow: 0 14px 34px -22px rgba(0, 0, 0, 0.85);
 }
 
 h3 {

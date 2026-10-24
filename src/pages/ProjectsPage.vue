@@ -38,7 +38,7 @@ function reset() {
 
 <template>
   <div class="section container">
-    <header class="page-header">
+    <header class="page-header anim-fade-up">
       <p class="mono overline">Projects</p>
       <h1>Things I've built and led</h1>
       <p class="lead">
@@ -68,14 +68,14 @@ function reset() {
       </div>
     </div>
 
-    <section v-if="!isFiltering" aria-labelledby="featured" class="block">
+    <section v-if="!isFiltering" v-reveal aria-labelledby="featured" class="block">
       <SectionHeading id="featured">Featured</SectionHeading>
       <ul class="grid">
         <li v-for="project in featured" :key="project.slug"><ProjectCard :project="project" /></li>
       </ul>
     </section>
 
-    <section aria-labelledby="all-projects" class="block">
+    <section v-reveal aria-labelledby="all-projects" class="block">
       <SectionHeading id="all-projects">
         {{ isFiltering ? 'Results' : 'All projects' }}
       </SectionHeading>

@@ -145,47 +145,102 @@ body.no-scroll {
   overflow: hidden;
 }
 
-/* Buttons: outlined accent, as in the reference design */
+/* Buttons: pill-shaped, with a soft fill and a lift + glow on hover */
 .btn {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  min-height: 44px;
-  padding: var(--space-3) var(--space-5);
+  min-height: 46px;
+  padding: var(--space-3) var(--space-6);
   border: 1px solid var(--accent);
-  border-radius: var(--radius-sm);
+  border-radius: 999px;
   background: transparent;
   color: var(--accent);
   font-family: var(--font-mono);
   font-size: var(--fz-sm);
+  font-weight: 500;
   line-height: 1;
-  transition: var(--transition);
+  letter-spacing: 0.01em;
+  overflow: hidden;
+  isolation: isolate;
+  transition: color var(--duration) var(--ease), border-color var(--duration) var(--ease),
+    transform var(--duration) var(--ease), box-shadow var(--duration) var(--ease);
 }
 
-.btn:hover {
+/* Accent fill that wipes up from the bottom on hover */
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   background: var(--accent-tint);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform var(--duration) var(--ease);
+}
+
+.btn:hover,
+.btn:focus-visible {
   text-decoration: none;
-  transform: translate(-3px, -3px);
-  box-shadow: 3px 3px 0 0 var(--accent);
+  transform: translateY(-3px);
+  border-color: var(--accent);
+  box-shadow: 0 10px 24px -10px var(--accent), 0 0 0 1px var(--accent-tint);
+}
+
+.btn:hover::before,
+.btn:focus-visible::before {
+  transform: scaleY(1);
+}
+
+.btn:active {
+  transform: translateY(-1px);
 }
 
 /* Solid button for the main action on a page */
 .btn-primary {
-  background: var(--accent);
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 60%, #7c93ff));
   color: var(--accent-contrast);
   font-weight: 600;
 }
 
-.btn-primary:hover {
-  background: var(--accent);
-  box-shadow: 3px 3px 0 0 var(--text-muted);
+.btn-primary::before {
+  background: rgba(255, 255, 255, 0.18);
+  transform: translateX(-120%) skewX(-18deg) scaleY(1);
+  transform-origin: center;
+  width: 60%;
+}
+
+.btn-primary:hover,
+.btn-primary:focus-visible {
+  color: var(--accent-contrast);
+  box-shadow: 0 14px 30px -10px var(--accent);
+}
+
+/* Sheen sweep across the primary button on hover */
+.btn-primary:hover::before,
+.btn-primary:focus-visible::before {
+  transform: translateX(260%) skewX(-18deg) scaleY(1);
+  transition: transform 600ms var(--ease);
 }
 
 .btn-sm {
-  min-height: 38px;
+  min-height: 40px;
   padding: var(--space-2) var(--space-4);
   font-size: var(--fz-xs);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .btn::before {
+    transition: none;
+  }
+  .btn:hover,
+  .btn:focus-visible {
+    transform: none;
+  }
 }
 
 .tags {

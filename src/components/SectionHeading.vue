@@ -21,6 +21,15 @@ defineProps({
   white-space: nowrap;
 }
 
+/* Monospace accent token, e.g. "#" — techie section marker */
+.section-heading::before {
+  content: '#';
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 0.85em;
+}
+
 .section-heading::after {
   content: '';
   flex: 1;

@@ -51,19 +51,30 @@ defineProps({
 .item {
   position: relative;
   padding-left: var(--space-6);
-  border-left: 2px solid var(--border);
+  padding-bottom: var(--space-6);
+  border-left: 2px solid transparent;
+  background:
+    linear-gradient(var(--accent), color-mix(in srgb, var(--accent) 20%, transparent)) left / 2px 100%
+      no-repeat;
 }
 
 .item::before {
   content: '';
   position: absolute;
-  left: -7px;
+  left: -8px;
   top: 6px;
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
   background: var(--bg);
   border: 2px solid var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-tint);
+  transition: box-shadow var(--duration) var(--ease), transform var(--duration) var(--ease);
+}
+
+.item:hover::before {
+  transform: scale(1.2);
+  box-shadow: 0 0 16px 2px var(--accent);
 }
 
 .dates {

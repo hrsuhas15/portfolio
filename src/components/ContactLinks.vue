@@ -41,11 +41,18 @@ a {
   width: 44px;
   height: 44px;
   color: var(--text-muted);
-  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  border-radius: 50%;
+  transition: color var(--duration) var(--ease), border-color var(--duration) var(--ease),
+    background var(--duration) var(--ease), transform var(--duration) var(--ease),
+    box-shadow var(--duration) var(--ease);
 }
 
 a:hover {
   color: var(--accent);
-  transform: translateY(-2px);
+  border-color: var(--accent);
+  background: var(--accent-tint);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px -8px var(--accent);
 }
 </style>

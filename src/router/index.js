@@ -22,7 +22,7 @@ const routes = [
   {
     path: '/projects/:slug',
     name: 'project',
-    component: () => import('../pages/NotFoundPage.vue'),
+    component: () => import('../pages/ProjectDetailPage.vue'),
     props: true,
   },
   {
@@ -47,7 +47,14 @@ const router = createRouter({
   routes,
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) return savedPosition
-    if (to.hash) return { el: to.hash, top: 80 }
+    // The page uses an out-in route transition, so the target section isn't in
+    // the DOM yet when navigation resolves. Wait past the transition, then
+    // scroll to the anchor.
+    if (to.hash) {
+      return new Promise((resolve) => {
+        setTimeout(() => resolve({ el: to.hash, top: 80, behavior: 'smooth' }), 320)
+      })
+    }
     return { top: 0 }
   },
 })

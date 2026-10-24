@@ -9,14 +9,14 @@ import { education } from '../data/experience'
 
 <template>
   <div class="section container about">
-    <header>
+    <header class="anim-fade-up">
       <p class="mono overline">About</p>
       <h1>{{ profile.name }}</h1>
       <p class="headline mono">{{ profile.headline.join(' · ') }}</p>
       <p class="location">{{ profile.location }}</p>
     </header>
 
-    <section aria-labelledby="background" class="block">
+    <section v-reveal aria-labelledby="background" class="block">
       <SectionHeading id="background">Background</SectionHeading>
       <div class="prose">
         <p v-for="para in profile.summary" :key="para">{{ para }}</p>
@@ -27,20 +27,20 @@ import { education } from '../data/experience'
       </ul>
     </section>
 
-    <section aria-labelledby="experience" class="block">
+    <section v-reveal aria-labelledby="experience" class="block">
       <SectionHeading id="experience">Experience</SectionHeading>
       <ExperienceTimeline />
     </section>
 
-    <section aria-labelledby="skills" class="block">
+    <section v-reveal aria-labelledby="skills" class="block">
       <SectionHeading id="skills">Skills</SectionHeading>
       <SkillsGrid />
     </section>
 
-    <section aria-labelledby="education" class="block">
+    <section v-reveal aria-labelledby="education" class="block">
       <SectionHeading id="education">Education</SectionHeading>
       <ul class="education">
-        <li v-for="item in education" :key="item.id">
+        <li v-for="item in education" :key="item.id" v-tilt="{ max: 5, scale: 1.01 }">
           <p class="mono dates">{{ item.start }} — {{ item.end }}</p>
           <h3>{{ item.degree }} — {{ item.field }}</h3>
           <p class="institution">{{ item.institution }}</p>
@@ -48,7 +48,7 @@ import { education } from '../data/experience'
       </ul>
     </section>
 
-    <section aria-labelledby="connect" class="block">
+    <section v-reveal aria-labelledby="connect" class="block">
       <SectionHeading id="connect">Connect</SectionHeading>
       <p>
         Email me at <a :href="`mailto:${profile.email}`">{{ profile.email }}</a> or find me on
@@ -110,6 +110,12 @@ h1 {
   background: var(--bg-elevated);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
+  transition: border-color var(--duration) var(--ease), box-shadow var(--duration) var(--ease);
+}
+
+.education li:hover {
+  border-color: var(--accent);
+  box-shadow: 0 14px 34px -22px rgba(0, 0, 0, 0.85);
 }
 
 .education h3 {

@@ -1,7 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { ArrowLeft, ArrowRight, Info } from 'lucide-vue-next'
-import ArchitectureDiagram from '../components/ArchitectureDiagram.vue'
+import { ArrowLeft, ArrowRight } from 'lucide-vue-next'
 import ProjectCard from '../components/ProjectCard.vue'
 import { getProjectBySlug, getAdjacentProjects, getRelatedProjects } from '../data/projects'
 
@@ -18,7 +17,7 @@ const related = computed(() => (project.value ? getRelatedProjects(project.value
   <article v-if="project" class="section container case-study">
     <RouterLink to="/projects" class="back mono"><ArrowLeft :size="14" aria-hidden="true" /> All projects</RouterLink>
 
-    <header class="header">
+    <header class="header anim-fade-up">
       <p class="mono overline">{{ project.category }}<template v-if="project.context"> · {{ project.context }}</template></p>
       <h1>{{ project.title }}</h1>
       <p class="subtitle">{{ project.subtitle }}</p>
@@ -27,7 +26,12 @@ const related = computed(() => (project.value ? getRelatedProjects(project.value
       </ul>
     </header>
 
-    <dl class="facts">
+    <section v-reveal class="cs-section" aria-labelledby="overview">
+      <h2 id="overview">Project overview</h2>
+      <p>{{ project.summary }}</p>
+    </section>
+
+    <dl v-reveal class="facts">
       <div>
         <dt class="mono">Problem</dt>
         <dd>{{ project.problem }}</dd>
@@ -38,46 +42,6 @@ const related = computed(() => (project.value ? getRelatedProjects(project.value
       </div>
     </dl>
 
-    <aside class="legend">
-      <Info :size="18" aria-hidden="true" />
-      <p>
-        Sections marked <span class="badge mono">General technical context</span> explain common engineering concepts to
-        give background. They describe typical approaches, not confirmed details of my implementation.
-      </p>
-    </aside>
-
-    <nav class="toc" aria-label="On this page">
-      <p class="mono">On this page</p>
-      <ol>
-        <li v-for="section in project.sections" :key="section.id">
-          <a :href="`#${section.id}`">{{ section.title }}</a>
-        </li>
-      </ol>
-    </nav>
-
-    <section
-      v-for="section in project.sections"
-      :key="section.id"
-      class="cs-section"
-      :class="{ context: section.kind === 'context' }"
-      :aria-labelledby="section.id"
-    >
-      <h2 :id="section.id">{{ section.title }}</h2>
-      <span v-if="section.kind === 'context'" class="badge mono">General technical context</span>
-      <p v-if="section.intro" class="note">{{ section.intro }}</p>
-      <p v-for="para in section.body" :key="para">{{ para }}</p>
-      <ArchitectureDiagram v-if="section.diagram && project.diagram" :diagram="project.diagram" />
-      <ul v-if="section.list" class="styled-list">
-        <li v-for="item in section.list" :key="item">{{ item }}</li>
-      </ul>
-      <dl v-if="section.items" class="items">
-        <div v-for="item in section.items" :key="item.name">
-          <dt>{{ item.name }}</dt>
-          <dd>{{ item.note }}</dd>
-        </div>
-      </dl>
-    </section>
-
     <section v-if="related.length" class="related" aria-labelledby="related">
       <h2 id="related">Related projects</h2>
       <ul class="grid">
@@ -86,11 +50,11 @@ const related = computed(() => (project.value ? getRelatedProjects(project.value
     </section>
 
     <nav class="pager" aria-label="Project navigation">
-      <RouterLink v-if="adjacent.previous" :to="`/projects/${adjacent.previous.slug}`" class="pager-link prev">
+      <RouterLink v-if="adjacent.previous" v-tilt="{ max: 5 }" :to="`/projects/${adjacent.previous.slug}`" class="pager-link prev">
         <span class="mono"><ArrowLeft :size="14" aria-hidden="true" /> Previous</span>
         {{ adjacent.previous.title }}
       </RouterLink>
-      <RouterLink v-if="adjacent.next" :to="`/projects/${adjacent.next.slug}`" class="pager-link next">
+      <RouterLink v-if="adjacent.next" v-tilt="{ max: 5 }" :to="`/projects/${adjacent.next.slug}`" class="pager-link next">
         <span class="mono">Next <ArrowRight :size="14" aria-hidden="true" /></span>
         {{ adjacent.next.title }}
       </RouterLink>

@@ -1,13 +1,19 @@
 <script setup>
 import SiteHeader from './components/SiteHeader.vue'
 import SiteFooter from './components/SiteFooter.vue'
+import AuroraBackground from './components/AuroraBackground.vue'
 </script>
 
 <template>
   <a class="skip-link" href="#main">Skip to content</a>
+  <AuroraBackground />
   <SiteHeader />
   <main id="main" tabindex="-1">
-    <RouterView />
+    <RouterView v-slot="{ Component }">
+      <Transition name="route" mode="out-in">
+        <component :is="Component" />
+      </Transition>
+    </RouterView>
   </main>
   <SiteFooter />
 </template>
